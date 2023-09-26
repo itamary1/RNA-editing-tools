@@ -29,9 +29,9 @@ SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 # run res scanner
 ${SCRIPT_DIR}/OneClick-RES-Scanner/easy_run_RES_scanner.sh -m $MAX_WORKERS -d $PROJECT_DIR -f $FASTQ_DIR -su $FASTQ_SUFFIX -dn $DNA_FILE -ln $DNA_LENGTH -lr $RNA_LENGTH -r $REF_FILE -a $ADDITIONAL_ARGUMENTS -b $BWA_PATH -s $SAMTOOLS_PATH -bl $BLAT_PATH
 
+
 reagions_dir=$PROJECT_DIR"/All_sites"
 tables_dir=${reagions_dir}"/final_tabels"
-
 # a file for all site positions - clear it if exist
 regions=${reagions_dir}"/All_sites.bed"
 mkdir -p $tables_dir
@@ -44,14 +44,15 @@ for res_resu in $(find $PROJECT_DIR -name "RES_final_result.txt" -type f); do
     $PYTHON_PATH $SCRIPT_DIR"/"parse_res_table.py $res_resu $(wc -m < $REF_FILE) 0.05 $out_file_path
     cat $out_file_path | awk 'BEGIN{FS="\t";OFS="\t"};NR>1{print $1,$2-1,$2}' >> $regions
 done
+# merge and sort genomics positions
 regions_merged_sorted=${PROJECT_DIR}"/All_sites/All_sites.sorted.merged.bed"
 $BEDTOOLS_PATH sort -i $regions | bedtools merge > $regions_merged_sorted
-# get all bams
+# get all RNA bams - create folder with links of all
 all_RNA_bams_dir=$PROJECT_DIR"/RNA_bams_links"
 mkdir -p $all_RNA_bams_dir
 find $PROJECT_DIR -name "RNA" -type d | xargs -I {} find {} -name "*bwa.bam" -type f | xargs -I BF ln -s BF ${all_RNA_bams_dir}/
 
-
+# run editing index on all the positions found by res-scanner
 editing_index_dir=$PROJECT_DIR"/RNA_editing_index"
 mkdir -p $editing_index_dir
 $EDITING_INDEX -d ${all_RNA_bams_dir} -l ${editing_index_dir}/LOGS/ -o ${editing_index_dir}/Output_pileup/ -os "${editing_index_dir}/Index_output/" --genome UserProvided -gf $REF_FILE --refseq $REFSEQ_FILE -rb $regions_merged_sorted --bam_files_suffix ".bwa.bam" --follow_links

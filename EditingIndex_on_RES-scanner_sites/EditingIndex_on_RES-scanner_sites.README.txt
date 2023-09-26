@@ -1,0 +1,11 @@
+This tool intended for being able to run rna-editing-index in case you dont have a known edited regions.
+If you will run rna-editing-index tool on all your regions in most cases the signal will be ~ 0.
+This tool is finding editing sites in all your samples using res-scanner, and will run rna-editing-index on the collection of all the editing sites postions.
+NOTE! DNA-seq is requaired (only one dna-seq of your organism, no one per each rna-seq)
+- means this run type support only 1 DNA-seq for many RNA-seq
+
+you should provide your own: samtools,blat,bwa,bedtools,python(with numphy and pandas),RNAEditingIndex tool
+
+run /home/cohenfamily345/RNA-editing-tools/EditingIndex_on_RES-scanner_sites/OneClick-RES-Scanner/init.sh before runing for the first time
+
+run the script RNA-editing-tools/EditingIndex_on_RES-scanner_sites/run_EditingIndex_on_RES-scanner_sites.sh --help for more details
