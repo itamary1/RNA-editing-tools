@@ -32,9 +32,11 @@ ${SCRIPT_DIR}/OneClick-RES-Scanner/easy_run_RES_scanner.sh -m $MAX_WORKERS -d $P
 reagions_dir=$PROJECT_DIR"/All_sites"
 tables_dir=${reagions_dir}"/final_tabels"
 
-# get all res results tables
-regions=${reagions_dir}"All_sites.bed"
+# a file for all site positions - clear it if exist
+regions=${reagions_dir}"/All_sites.bed"
 mkdir -p $tables_dir
+truncate -s 0 $regions
+# find all res results files, parse them, write final tabels to a dir and create bed file from all the genomics positions
 for res_resu in $(find $PROJECT_DIR -name "RES_final_result.txt" -type f); do
     file_name=${res_resu%/identification/*}
     file_name=${file_name##*/}
@@ -49,8 +51,7 @@ all_RNA_bams_dir=$PROJECT_DIR"/RNA_bams_links"
 mkdir -p $all_RNA_bams_dir
 find $PROJECT_DIR -name "RNA" -type d | xargs -I {} find {} -name "*bwa.bam" -type f | xargs -I BF ln -s BF ${all_RNA_bams_dir}/
 
-#"/private6/Projects/Yeast_Itamar_03_2022/RNAEditingIndex_files/yeast_refseq_sub_new.bed"
 
 editing_index_dir=$PROJECT_DIR"/RNA_editing_index"
 mkdir -p $editing_index_dir
-$EDITING_INDEX -d ${all_RNA_bams_dir} -l ${editing_index_dir}/LOGS/ -o ${editing_index_dir}/Output_pileup/ -os "${editing_index_dir}/Index_output/" --genome UserProvided -gf $REF_FILE --refseq $REFSEQ_FILE -rb $regions_merged_sorted --bam_files_suffix .bam --follow_links
+$EDITING_INDEX -d ${all_RNA_bams_dir} -l ${editing_index_dir}/LOGS/ -o ${editing_index_dir}/Output_pileup/ -os "${editing_index_dir}/Index_output/" --genome UserProvided -gf $REF_FILE --refseq $REFSEQ_FILE -rb $regions_merged_sorted --bam_files_suffix ".bwa.bam" --follow_links
