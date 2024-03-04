@@ -1,8 +1,0 @@
-This scripts collections is for being able to run res-scanner easly with one command instead of the long process of runing it manualy
-Its will write the config files for you.
-it will run each rna-sample in diffrent process, number of parllel samples at once is will be set by the user
-
-please run init.sh before the first run.
-
-
-you should provide your own samtools,blat,bwa
