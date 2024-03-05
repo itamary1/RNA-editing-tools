@@ -1,0 +1,14 @@
+includeConfig 'nextflow.base.local.config'
+// pre
+includeConfig './SubP_configs/sra_download.nf.local.config'
+includeConfig './SubP_configs/quality_check.nf.local.config'
+includeConfig './SubP_configs/fastp.old.nf.local.config'
+includeConfig './SubP_configs/fastp.new.nf.local.config'
+// ananlize
+includeConfig './SubP_configs/star.nf.local.config'
+includeConfig './SubP_configs/salmon.nf.local.config'
+includeConfig './SubP_configs/editing_index.nf.local.config'
+
+//other
+includeConfig './SubP_configs/compress_fastqs.nf.local.config'
+includeConfig './SubP_configs/combine_waiting.nf.local.config'

@@ -1,0 +1,14 @@
+includeConfig 'nextflow.base.docker.config'
+// pre
+includeConfig './SubP_configs/sra_download.nf.docker.config'
+includeConfig './SubP_configs/quality_check.nf.docker.config'
+includeConfig './SubP_configs/fastp.old.nf.docker.config'
+includeConfig './SubP_configs/fastp.new.nf.docker.config'
+// ananlize
+includeConfig './SubP_configs/star.nf.docker.config'
+includeConfig './SubP_configs/salmon.nf.docker.config'
+includeConfig './SubP_configs/editing_index.nf.docker.config'
+
+//other
+includeConfig './SubP_configs/compress_fastqs.nf.docker.config'
+includeConfig './SubP_configs/combine_waiting.nf.docker.config'
