@@ -1,0 +1,9 @@
+{
+    "SPLIT_BY_VAR": "GenomicRegion",
+    "COLNAMES": "Sample AluElement Length SenseGeneCommonName SenseGeneRefSeqID AntisenseGenomicPosition SenseGenomicPosition AntisenseGeneRefSeqID AntisenseGeneCommonName TotalCoverageAtAllPositions NumOfG2AMismatches NumOfT2GMismatches NumOfA2TMismatches NumOfC2GMismatches NumOfA2GMismatches NumOfT2CMismatches NumOfG2TMismatches NumOfC2AMismatches NumOfC2TMismatches NumOfT2AMismatches NumOfG2CMismatches NumOfA2CMismatches NumOfT NumOfG NumOfC NumOfA",
+    "GROUPING_VARS": "AluElement Group",
+    "SPLIT_OUT_PREFIX": "StrandDerivingCountsPerRegion",
+    "SPLIT_OUT_SUFFIX": "preprocessed.unstranded.csv",
+    "POOL_OUT_PREFIX": "EditingPerRegionPerSample",
+    "POOL_OUT_SUFFIX": "pooled.withSignal.unstranded.csv"
+}

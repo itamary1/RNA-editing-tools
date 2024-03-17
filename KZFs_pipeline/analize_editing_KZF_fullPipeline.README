@@ -1,0 +1,36 @@
+
+read Levanon_lab_NEXTFLOW_PIPELINE.README first
+
+If you not run on levanon labs servers, you need to take care of the following:
+    # 
+
+
+    # you need python 3.9 with the following packages:
+    datetime
+    enum
+    multiprocessing
+    pprint
+    argparse
+    csv
+    gzip
+    inspect
+    json
+    logging
+    os
+    pandas
+    re
+    shutil
+    subprocess
+    sys
+    traceback
+
+    set 'which_python_39' to your python interpreter
+
+    you also need to have and R running with 'Rscript' command with the following libraries:
+    argparse
+    data.table
+    dplyr
+    tidyr
+    dtplyr
+    log4r
+    purrr
