@@ -7,15 +7,6 @@ if((!params.have_base_config) && (!params.help)){
  System.exit(1)
 }
 
-// if((!params.profile_selected) && (!params.help)){
-// println "please select a profile with -profile <proile_name>"
-//  System.exit(1) 
-// }
-
-// if((params.docker_run) && (!params.bams_dir) && (!params.help)){
-//     println "you must set bams dir when runing with docker. exiting.."
-//     System.exit(1)
-// }
 
 def helpMessage() {
     log.info '''\
@@ -23,9 +14,9 @@ def helpMessage() {
             ===================================
 
             commnad example:
-            config=/home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/SubP_configs/editing_index.nf.docker.config
-            script=/home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Subpipelines/editing_index.nf
-            bams_dir=/private10/Projects/Itamar/check_Lab_pipline/try_FUP/Raw_data/STAR
+            config=${PIPELINE_DIR}/Configs/Docker/SubP_configs/editing_index.nf.docker.config
+            script=${PIPELINE_DIR}/Subpipelines/editing_index.nf
+            bams_dir=try_FUP/Raw_data/STAR
             nohup nextflow -bg -c $config run $script -profile hg38 --bams_dir $bams_dir --Eindex_result_dir $PWD/Results/AEI &> run_EI.out.txt &
 
             by defualt it will run on alu index, if you want to change it -
@@ -44,15 +35,11 @@ def helpMessage() {
 
             run in docker: lite docker containing no resources(genome, expression file ..) in which you must specify all the resources.
             I already create profile for local hg38 and mm10 resources - run with "-profile "
-            if somone have time to add more profiles...
-            there is a full version of docker which support built in files for several popular assemblies, but there is no support for it yet(becaouse docker mounting constraint, and I dont think its important/usfull).
 
             all params and their defaults:
             bams_dir =''
             Eindex_result_dir="${launchDir}/AEI/"
-            //run in lite version - use local resources files instead of inner docker's
-            // currently not supporting run on full docker (docker_lite=false)
-            docker_lite=true
+
             stranded=false
             singleEnd=false
             keep_cmpileup=false
@@ -103,12 +90,6 @@ process build_EI_docker {
         """
 }
 
-// some pathes needed for run in docker
-// if(params.docker_run){
-//     result_dirBaseName=(new File(params.Eindex_result_dir)).name
-//     result_dir="/data/output/$result_dirBaseName"
-// }
-
 
 
 process RUN_EINDEX {
@@ -143,7 +124,6 @@ process RUN_EINDEX {
             paired_flag=''
         }
 
-        // most of the flags are mandatory in the lite docker, but I did it optional to support the full docker - (which is maybe not fully supported in other parts of the code)
         mustContain = params.must_contain ? "-s $params.must_contain" : ''
         per_region_flag = params.per_region_output ? '--per_region_output' : ''
         per_sample_flag = params.per_sample_output ? '--per_sample_output' : ''
@@ -210,7 +190,6 @@ process RUN_EINDEX_multi_regions {
             paired_flag=''
         }
 
-        // most of the flags are mandatory in the lite docker, but I did it optional to support the full docker - (which is maybe not fully supported in other parts of the code)
         mustContain = params.must_contain ? "-s $params.must_contain" : ''
         per_region_flag = params.per_region_output ? '--per_region_output' : ''
         per_sample_flag = params.per_sample_output ? '--per_sample_output' : ''
@@ -235,29 +214,6 @@ process RUN_EINDEX_multi_regions {
         ln -s ${full_res_dir} ./index_result
         """
 }
-
-// workflow EI_PIPELINE_dynamic_regionsAndRefseq {
-//     take:
-//     All_bams_dir_path
-//     regions
-//     refseq_file
-//     result_dir
-//     star_finished
-//     main:
-//     bams_dir_ch=Channel.fromPath(All_bams_dir_path, type:'dir').ifEmpty { System.exit(1), "Cannot find your bams folder"}
-//     RUN_EINDEX(All_bams_dir_path,\
-//     bams_dir_ch,\
-//     result_dir,\
-//     params.genome_regions_index,\
-//     params.expression_file,\
-//     refseq_file\
-//     params.snp_file,\
-//     regions,\
-//     params.genome_file,\
-//     star_finished)
-//     emit:
-//     RUN_EINDEX.out
-// }
 
 
 workflow EI_PIPELINE_dynamicRegRef {

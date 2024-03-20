@@ -16,7 +16,8 @@ def helpMessage() {
 
             run editing analysis from sra-acc list  
             ===================================
-            nohup nextflow -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/full_levanon_pipeline.nf.docker.config -bg run /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/full_levanon_pipeline.nf -profile hg38 --use_existing_fastq false --ACC_list /home/alu/twerski/Scripts/Nextflow/training_data/small_srr.RL75.Human.txt --genome_length 75 --project_dir $PWD &> run.out.txt &
+            example command:
+            nohup nextflow -c ${PIPELINE_DIR}/Configs/Docker/full_levanon_pipeline.nf.docker.config -bg run ${PIPELINE_DIR}/full_levanon_pipeline.nf -profile hg38 --use_existing_fastq false --ACC_list small_srr.RL75.Human.txt --genome_length 75 --project_dir $PWD &> run.out.txt &
 
 
 
@@ -57,11 +58,11 @@ def helpMessage() {
             params.trimstep_basesT=10
 
             
-            params.annotation='hg38'
             >> salmon params
-            you need to override in case of not hg38 and if you want to run salmon:
-            params.tx2id_geneMap = '/private/dropbox/Salmon_1.4.0/salmon_index/hg38/gencode_v32.transcriptToGeneID.tab'
-            params.transcripts_index == '/private/dropbox/Salmon_1.4.0/salmon_index/hg38'
+            you need to override in case of not hg38 or mm10 and if you want to run salmon:
+            params.tx2id_geneMap 
+
+            params.transcripts_index
             
             >> STAR is supporting hg38 and mm10 with several lengthes, in case of other genome inedexes override
             params.star_genome

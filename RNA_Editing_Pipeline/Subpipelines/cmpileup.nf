@@ -7,23 +7,15 @@ if((!params.have_base_config) && (!params.help)){
 }
 
 
-// if((!params.profile_selected) && (!params.help)){
-// println "please select a profile with -profile <proile_name>"
-//  System.exit(1) 
-// }
 
-// if((params.docker_run) && (!params.bams_dir) && (!params.help)){
-//     println "you must set bams dir when runing with docker. exiting.."
-//     System.exit(1)
-// }
 
 def helpMessage() {
     log.info '''\
             RUN CMpileup
             ===================================
             command example:
-            bams_dir="/private10/Projects/Itamar/check_Lab_pipline/try_FUP/Raw_data/STAR"
-            nohup nextflow -bg -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/SubP_configs/cmpileup.nf.docker.config run /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Subpipelines/cmpileup.nf -profile hg38 --bams_dir $bams_dir --cmp_result_dir $PWD/Results/CMP &> run_CMP.out.txt &
+            bams_dir="try_FUP/Raw_data/STAR"
+            nohup nextflow -bg -c ${PIPELINE_DIR}/Configs/Docker/SubP_configs/cmpileup.nf.docker.config run ${PIPELINE_DIR}/Subpipelines/cmpileup.nf -profile hg38 --bams_dir $bams_dir --cmp_result_dir $PWD/Results/CMP &> run_CMP.out.txt &
 
             note that if you giving list/channel of regions, you shouldnt set params.cmp_regions_name because of names conflict
 
@@ -74,33 +66,6 @@ process build_CMP_docker {
 }
 
 
-// process RUN_CMP {
-//     tag "cmpileup on $All_bams_dir_path_full"
-//     // maxForks 1
-//     input:
-//         val All_bams_dir_path_full
-//         path All_bams_dir_path
-//         path result_dir
-//         val full_res_dir
-//         path cmp_conf_file
-//         path genome_fa
-//         path regions_bed
-//         val star_finished
-//     output:
-//         path './cmp_result/cmpileups'
-    
-//     script:
-//         """
-//         awk '{OFS="\t"; print \$1,\$2,\$3}' $regions_bed > ${regions_bed}.bed3.bed
-//         # create dirs for results and logs
-//         mkdir -p ${full_res_dir}/logs
-//         mkdir -p ${full_res_dir}/cmpileups
-//         # save my currnet working directory
-//         Mywd=\$(pwd)
-//         $params.which_CMP_python $params.which_CMP_PipelineManger -t $params.cmp_truncation -c $cmp_conf_file -d $All_bams_dir_path_full -f $params.bams_suffix -o ${full_res_dir}/cmpileups -l ${full_res_dir}/logs --follow_links -a regions_coordinates_bed=\\'\${Mywd}/${regions_bed}.bed3.bed\\' regions_name=\\'${params.cmp_regions_name}\\' genome_fasta=\\'\$(readlink -f ${genome_fa})\\' bam_file_suffix=\\'${params.bams_suffix}\\' $params.cmp_additional_params
-//         ln -s ${full_res_dir} ./cmp_result
-//         """
-// }
 
 // in addition to each path(regions_bed) -
 // in this process the logs are in local directory 

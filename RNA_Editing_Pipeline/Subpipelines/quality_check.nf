@@ -6,6 +6,28 @@ if((!params.have_base_config) && (!params.help)){
  System.exit(1) 
 }
 
+def helpMessage() {
+    log.info '''\
+
+    
+            run FASTQC-MULTiQC
+            ===================================
+            set fastq in dir with --indir "path/to"
+            output will be writen to $params.multiqc_results_dir -
+            
+            further explantion:
+            mandatory pramters for this pipeline is params.indir of fastq files
+            params.indir=''
+            recomended to set the prameters - out directory and if singleEnd:
+            params.singleEnd = false
+            optional prameters depend on your files structure:
+            params.fastq_suffix='fastq'
+            params.fastq_pat="${params.indir}/*_{1,2}.${params.fastq_suffix}"
+            extra parameters:
+            '''
+            .stripIndent()
+
+}
 
 
 process FASTQC {
@@ -47,28 +69,6 @@ workflow FASTQC_PIPELINE {
     MULTIQC.out
 }
 
-def helpMessage() {
-    log.info '''\
-
-    
-            run FASTQC-MULTiQC
-            ===================================
-            set fastq in dir with --indir "path/to"
-            output will be writen to $params.multiqc_results_dir -
-            
-            further explantion:
-            mandatory pramters for this pipeline is params.indir of fastq files
-            params.indir=''
-            recomended to set the prameters - out directory and if singleEnd:
-            params.singleEnd = false
-            optional prameters depend on your files structure:
-            params.fastq_suffix='fastq'
-            params.fastq_pat="${params.indir}/*_{1,2}.${params.fastq_suffix}"
-            extra parameters:
-            '''
-            .stripIndent()
-
-}
 
 workflow {
     if (params.help){

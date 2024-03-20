@@ -7,10 +7,10 @@ if((!params.have_base_config) && (!params.help)){
  System.exit(1) 
 }
 
-// if((!params.profile_selected) && (!params.help)){
-// println "please select a profile with -profile <proile_name>"
-//  System.exit(1) 
-// }
+if((!params.profile_selected) && (!params.help)){
+println "please select a profile with -profile <proile_name>"
+ System.exit(1) 
+}
 
 
 
@@ -20,7 +20,7 @@ def helpMessage() {
             ===================================
             
             set fastq dir with --indir "path/to"
-            run with -profile hg38 for compatible resources, I will be glad if you add other files to othe profiles in the config
+            run with -profile hg38 or mm10 for compatible resources
             output will be writen to params.salmon_outdir="${launchDir}/SALMON"
 
             params.run_salmon_summary - defualts: true - will run roni's summary script()
@@ -33,8 +33,8 @@ def helpMessage() {
             params.fastq_pat="${params.indir}/${params.mates_patt}.${params.fastq_suffix}"
             //prams of salmon index
             params.salmon_lib_type = 'A'
-            params.transcripts_index = '/private/dropbox/Salmon_1.4.0/salmon_index/hg38'
-            params.tx2id_geneMap = '/private/dropbox/Salmon_1.4.0/salmon_index/hg38/gencode_v32.transcriptToGeneID.tab'
+            params.transcripts_index 
+            params.tx2id_geneMap 
 
             //other run params
             params.keep_other_files = false
@@ -45,10 +45,6 @@ def helpMessage() {
 
 }
 
-// if(params.docker_run && params.run_salmon_summary){
-//     println "you cant run salmon summary in docker! set run_salmon_summary=false"
-//     System.exit(1)
-// }
 
 process CREATE_OUT_DIR {
     tag "create salmon outdir"

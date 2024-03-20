@@ -8,7 +8,6 @@ if((!params.have_base_config) && (!params.help)){
 }
 
 
-// >>>>>>>>>>>>>>>>>>> parameters for fastp were taken from /home/alu/fulther/ConfigsHillel/downloadFixup.fastp.conf  <<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 def helpMessage() {
     log.info '''\
@@ -16,12 +15,11 @@ def helpMessage() {
     
             DOWNLOAD-FIXUP PIPELINE => DOWNLOAD->FASTQC->FASTP->FASTQC
             ===================================
-            nohup nextflow -bg -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/downloadAndPreprocess.nf.docker.config run /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/downloadAndPreprocess.nf --ACC_list /home/alu/twerski/Scripts/Nextflow/training_data/small_srr.RL75.Human.txt &> run.out.txt
+            example command:
+            nohup nextflow -bg -c ${PIPELINE_DIR}/Configs/Docker/downloadAndPreprocess.nf.docker.config run ${PIPELINE_DIR}/downloadAndPreprocess.nf --ACC_list small_srr.RL75.Human.txt &> run.out.txt
 
 
 
-
-            >>>>>>>>>>>>>>>>>>> paramters for fastp were taken from /home/alu/fulther/ConfigsHillel/downloadFixup.fastp.conf  <<<<<<<<<<<<<<<<<<<<<<<<<<<
 
             directory for your pipeline results, if wont set it wil be $PWD
             params.project_dir="$launchDir"

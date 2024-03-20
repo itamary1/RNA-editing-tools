@@ -1,5 +1,5 @@
 nextflow.enable.dsl=2
-// >>>>>>>>>>>>>>>>>>> paramters for fastp were taken from /home/alu/fulther/ConfigsHillel/downloadFixup.fastp.conf  <<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 // to run this wirkflow you only need to run with --ACC_list "path/to/file.txt" --outdir "path/to/dir" 
 params.help=false

@@ -19,7 +19,7 @@ set your deserved genome by
 
 for running the whole pipeline run:
 
-nextflow -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/full_levanon_pipeline.nf.docker.config run /home/full_levanon_pipeline.nf -profile hg38 --use_existing_fastq false --ACC_list /home/alu/twerski/Scripts/Nextflow/training_data/small_srr.RL75.Human.txt --genome_length 75 --project_dir $PWD &> run.out.txt &
+nextflow -c ${PIPELINE_DIR}/Configs/Docker/full_levanon_pipeline.nf.docker.config run ${PIPELINE_DIR}/full_levanon_pipeline.nf -profile hg38 --use_existing_fastq false --ACC_list small_srr.RL75.Human.txt --genome_length 75 --project_dir $PWD &> run.out.txt &
 
 
 the pipeline consists of two major pipelines:
@@ -36,23 +36,12 @@ installation:
 
     install Nextflow and all its dependency https://nextflow.io/ 
 
-    If you not run on levanon labs servers, you need to take care of the following:
+    run init.sh file - it will download all the heavy resources from the web and will create salmon and star indexes
+    !!!!  run init.sh wil take many hours !!!!
 
-            download/create all the following genomic files and set the following params:
-            # genome fasta
-            set params.genome_file
-            # expression_file like "ucscHg38GTExGeneExpression.bed.gz"
-            set params.expression_file 
-            # star indexd genome
-            set params.star_genome
-            # refSeq genes file like ucscHg38RefSeqCurated.bed.gz
-            set params.refseq_file
-            # snps file like ucscHg38CommonGenomicSNPs150.bed.gz
-            set params.snp_file
-            # salmon transcripts index
-            set params.transcripts_index
-            # for salmon - like gencode_v32.transcriptToGeneID.tab
-            set params.tx2id_geneMap 
+
+    If you not run on levanon labs servers:
+
 
         take care of code that not run inside dockers:
             You can disable the summarizing scripts with the params
@@ -60,23 +49,4 @@ installation:
             run_salmon_summary = false
             run_star_summarize_script = false
 
-            If you run the summarize scripts, you need python2.7 with the packeges:
-            os
-            argparse
-            sys
-            subprocess
-            traceback
-            
-            set 'which_python_27' to your python interpreter
-            
-            You also need to have and R running with 'Rscript' command with the following libraries:
-            argparse
-            cowplot
-            data.table
-            dplyr
-            ggplot2
-            log4r
-            purrr
-            reshape2
-            tibble
-            tidyr
+ 

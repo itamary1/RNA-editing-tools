@@ -1,6 +1,5 @@
 nextflow.enable.dsl=2
 
-// >>>>>>>>>>>>>>>> star parameters  were take from /private/common/Software/PipelineConfigs/runSTAR.conf <<<<<<<<<<<<<<
 params.help=false
 params.have_base_config=false
 if((!params.have_base_config) && (!params.help)){

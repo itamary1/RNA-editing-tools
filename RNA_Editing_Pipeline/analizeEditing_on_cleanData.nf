@@ -17,8 +17,9 @@ def helpMessage() {
 
     
             Analize RNA Editing on Clean Fastq PIPELINE => will run Salmon,Star,AluEditingIndex and compress the Fastq at the End
-            ===================================     
-            nohup nextflow -bg -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/analizeEditing_on_cleanData.nf.docker.config run /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/analizeEditing_on_cleanData.nf -profile hg38 --genome_length 75 --indir /private10/Projects/Itamar/check_Lab_pipline/tryDAP/Raw_data/Fastp_out_fastqs &> run.out.txt 
+            ===================================
+            example command:
+            nohup nextflow -bg -c ${PIPELINE_DIR}/Configs/Docker/analizeEditing_on_cleanData.nf.docker.config run ${PIPELINE_DIR}/analizeEditing_on_cleanData.nf -profile hg38 --genome_length 75 --indir check_Lab_pipline/tryDAP/Raw_data/Fastp_out_fastqs &> run.out.txt 
 
 
 
@@ -28,9 +29,9 @@ def helpMessage() {
             params.genome_length=''
             
             >> salmon params
-            you need to override in case of not hg38 and if you want to run salmon:
-            params.tx2id_geneMap = '/private/dropbox/Salmon_1.4.0/salmon_index/hg38/gencode_v32.transcriptToGeneID.tab'
-            params.transcripts_index == '/private/dropbox/Salmon_1.4.0/salmon_index/hg38'
+            you need to override in case of not hg38 or mm10 and if you want to run salmon:
+            params.tx2id_geneMap 
+            params.transcripts_index
             
             >> STAR is supporting hg38 and mm10 withj several lengthes, in case of other genome inedexes override
             params.star_genome
@@ -77,25 +78,6 @@ process make_project_dirs {
   """
 }
 
-
-// process add_acc {
-//   input:
-//     path bams_dir
-//   output:
-//     tuple val(acc), path(bams_dir)
-//   script:
-//   as_str = "$bams_dir"
-//   acc = as_str.lastIndexOf('/').with {it != -1 ? as_str[it..<as_str.length()] : as_str}
-//   """
-//   """
-// }
-
-
-//you also should look in the salmon index properties!!!
-// if((params.annotation!='hg38' && params.transcripts_index == '/private/dropbox/Salmon_1.4.0/salmon_index/hg38' && params.run_salmon) && !params.help ) {
-//     println "please override salmon-index in params.transcripts_index and params.tx2id_geneMap"
-//     System.exit(1)
-// }
 
 
 
