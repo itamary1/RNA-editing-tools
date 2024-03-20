@@ -15,15 +15,28 @@ def print_help_mesage():
     This tool are for getting Substructures information of editing sites
 
     Its accept csv table of editing sites with columns of 'Coord' and 'Chr'
+    
+    the input arguments are positional arguments - make sure its the correct order
+
+    inputs argumnts:
+    genome - genome in fasta format
+    editing_sites_table  - csv table of editing sites with columns of 'Coord' and 'Chr'
+    data_tabels - FOLD datatables
+    FOLD - path to FOLD program
+    bpRNA - path to bprna program
+    out_table_path - path to write output table
+    window (optional)- window bp in each side of every editing site to take for calculating all the substructures around the editing site - defualt 400
 
     an example runing command:
     
-    python Substructures_Calculator.py $genome $editing_sites_table $data_tabels $FOLD $bpRNA $out_table_path
+    python Substructures_Calculator.py $genome $editing_sites_table $data_tabels $FOLD $bpRNA $out_table_path $window
 
     See full runing example at usage_example.sh
 
+
+
     previous dependecy - you need to have:
-        - pandas and python 3.9
+        -python 3.9 with pandas and SeqIO
         -Fold from RNAstructure package and its datatables https://rna.urmc.rochester.edu/RNAstructureDownload.html
         -perl with Graph.pm
         -bpRNA https://github.com/hendrixlab/bpRNA
@@ -50,7 +63,7 @@ def get_seq(site, window,fasta_getter):
     return seq
 
 if __name__ =="__main__":
-    if len(sys.argv) < 2 or sys.argv[1]=='-h' or sys.argv[1]=='--help':
+    if len(sys.argv) < 6 or sys.argv[1]=='-h' or sys.argv[1]=='--help':
         print_help_mesage()
         exit(0)
     try:
@@ -60,13 +73,14 @@ if __name__ =="__main__":
         Fold=sys.argv[4]
         bpRNA=sys.argv[5]
         out_path=sys.argv[6]
+        window= 400 if len(sys.argv) < 7 else sys.argv[7]
         # create an object for getting fasta sequnces from a genome base on coordinates
         # the objext will read the whole genome to the memory for fast respone to requests
         fasta_getter = bedtoolsIT.genome_reader(genome_file)
         # read editing sites table
         editing_sites_table=pd.read_csv(in_path)
         # get sequece of 400bp in each side of every editing site
-        seq_list = [get_seq(site,400,fasta_getter) for i,site in editing_sites_table.iterrows()]
+        seq_list = [get_seq(site,window,fasta_getter) for i,site in editing_sites_table.iterrows()]
         # create Near_site_folding_calculator
         nc = RNAstracture.Near_site_folding_calculator(data_tables,Fold,bpRNA)
         # calculate substructurs for every editing site

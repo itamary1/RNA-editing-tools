@@ -1,0 +1,82 @@
+    ----------------------------------------------------------------------------------------------------------
+
+                                    RNA Editing Standard Pipeline    
+
+    -----------------------------------------------------------------------------------------------------------
+
+An pipeline designed to run RNA editing analysis.
+
+the pipeline input is sra accessions list or folder with fastq files
+
+every .nf file have compatible .config file in the Configs folder
+
+run the nf file with:
+
+nextflow -c file.config run file.nf 
+
+set your deserved genome by 
+-profile like
+
+for running the whole pipeline run:
+
+nextflow -c /home/alu/twerski/Scripts/Nextflow/Levanon_lab_NEXTFLOW_PIPELINE/Configs/Docker/full_levanon_pipeline.nf.docker.config run /home/full_levanon_pipeline.nf -profile hg38 --use_existing_fastq false --ACC_list /home/alu/twerski/Scripts/Nextflow/training_data/small_srr.RL75.Human.txt --genome_length 75 --project_dir $PWD &> run.out.txt &
+
+
+the pipeline consists of two major pipelines:
+-  downloadAndPreprocess.nf
+    will run quality checks and will clean the retrieved fastq files
+-  analizeEditing_on_cleanData.nf
+    will map fastq files using star, and calculate gene expression and RNA editing in several ways
+you can run any of the two pipeline by itself or run the small subpipelines in the Subpipline folder
+
+every nf file contain example of running command if you run its with --help
+
+
+installation:
+
+    install Nextflow and all its dependency https://nextflow.io/ 
+
+    If you not run on levanon labs servers, you need to take care of the following:
+
+            download/create all the following genomic files and set the following params:
+            # genome fasta
+            set params.genome_file
+            # expression_file like "ucscHg38GTExGeneExpression.bed.gz"
+            set params.expression_file 
+            # star indexd genome
+            set params.star_genome
+            # refSeq genes file like ucscHg38RefSeqCurated.bed.gz
+            set params.refseq_file
+            # snps file like ucscHg38CommonGenomicSNPs150.bed.gz
+            set params.snp_file
+            # salmon transcripts index
+            set params.transcripts_index
+            # for salmon - like gencode_v32.transcriptToGeneID.tab
+            set params.tx2id_geneMap 
+
+        take care of code that not run inside dockers:
+            You can disable the summarizing scripts with the params
+            run_cmp_summarize = false
+            run_salmon_summary = false
+            run_star_summarize_script = false
+
+            If you run the summarize scripts, you need python2.7 with the packeges:
+            os
+            argparse
+            sys
+            subprocess
+            traceback
+            
+            set 'which_python_27' to your python interpreter
+            
+            You also need to have and R running with 'Rscript' command with the following libraries:
+            argparse
+            cowplot
+            data.table
+            dplyr
+            ggplot2
+            log4r
+            purrr
+            reshape2
+            tibble
+            tidyr

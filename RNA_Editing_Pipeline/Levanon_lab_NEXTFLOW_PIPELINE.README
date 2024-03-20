@@ -1,7 +1,7 @@
 
 If you not run on levanon labs servers, you need to take care of the following:
 
-    download/create all the following genomic files and set teh following params:
+    download/create all the following genomic files and set the following params:
         # genome fasta
         params.genome_file
         # expression_file like "ucscHg38GTExGeneExpression.bed.gz"

@@ -1,0 +1,34 @@
+    ----------------------------------------------------------------------------------------------------------
+
+                                                    Substructures Calculator
+
+    -----------------------------------------------------------------------------------------------------------
+    This tool are for getting Substructures information of editing sites
+
+    Its accept csv table of editing sites with columns of 'Coord' and 'Chr'
+    
+    the input arguments are positional arguments - make sure its the correct order
+
+    inputs argumnts:
+    genome - genome in fasta format
+    editing_sites_table  - csv table of editing sites with columns of 'Coord' and 'Chr'
+    data_tabels - FOLD datatables
+    FOLD - path to FOLD program
+    bpRNA - path to bprna program
+    out_table_path - path to write output table
+    window (optional)- window bp in each side of every editing site to take for calculating all the substructures around the editing site - defualt 400
+
+    an example runing command:
+    
+    python Substructures_Calculator.py $genome $editing_sites_table $data_tabels $FOLD $bpRNA $out_table_path $window
+
+    See full runing example at usage_example.sh
+
+
+
+    previous dependecy - you need to have:
+        -python 3.9 with pandas and SeqIO
+        -Fold from RNAstructure package and its datatables https://rna.urmc.rochester.edu/RNAstructureDownload.html
+        -perl with Graph.pm
+        -bpRNA https://github.com/hendrixlab/bpRNA
+
