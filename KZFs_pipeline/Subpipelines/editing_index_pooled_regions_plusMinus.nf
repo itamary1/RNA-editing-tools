@@ -16,20 +16,20 @@ def helpMessage() {
             runing command example:
             
             # set vars:
-            bed6_file="/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/KZFs/human_KZFs_Imbeault_Gencode_407Genes_CDS.bed6.bed"
-            bams_dir="/private8/Projects/itamar/ZNF/jose/Differentiated_PA1/Raw_data/STAR/"
+            bed6_file="${P_DIR}/Resources/KZFs/human_KZFs_Imbeault_Gencode_407Genes_CDS.bed6.bed"
+            bams_dir="${B_P}/STAR/"
             # run:
-            nohup nextflow -bg -c /home/alu/twerski/Scripts/Nextflow/Special_pipelines/Configs/Dockers/SubP_configs/editing_index_pooled_regions_plusMinus.nf.docker.config run /home/alu/twerski/Scripts/Nextflow/Special_pipelines/Subpipelines/editing_index_pooled_regions_plusMinus.nf --bams_dir $bams_dir \
+            nohup nextflow -bg -c ${P_DIR}/Configs/Dockers/SubP_configs/editing_index_pooled_regions_plusMinus.nf.docker.config run ${P_DIR}/Subpipelines/editing_index_pooled_regions_plusMinus.nf --bams_dir $bams_dir \
             --cmp_regions_bed $cmp_regions_bed \
             --PMpool_bed6_file $bed6_file \
             -profile hg38 &> runPMP.txt &
 
             disjointed:
-            bams=/private10/Projects/Itamar/check_Lab_pipline/try_FUP/Raw_data/STAR
-            OD=/private10/Projects/Itamar/check_Lab_pipline/Try_DisJ
-            script=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Subpipelines/editing_index_pooled_regions_plusMinus.nf
-            conf=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Configs/Dockers/SubP_configs/editing_index_pooled_regions_plusMinus.nf.docker.config
-            bed6F=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/KZFs/human_KZFs_Imbeault_Gencode_407Genes_CDS_merged.bed6.sorted.bed
+            bams=${B_P}/STAR
+            OD=Try_DisJ
+            script=${P_DIR}/Subpipelines/editing_index_pooled_regions_plusMinus.nf
+            conf=${P_DIR}/Configs/Dockers/SubP_configs/editing_index_pooled_regions_plusMinus.nf.docker.config
+            bed6F=${P_DIR}/Resources/KZFs/human_KZFs_Imbeault_Gencode_407Genes_CDS_merged.bed6.sorted.bed
 
             nextflow -c "$conf" run "$script" --PMpool_bed6_file $bed6F --bams_dir "$bams" --PMpooledEI_result_dir "$OD" --run_disjoint -profile hg38 > run_nf.out.txt
             
@@ -94,28 +94,6 @@ process create_dirs_split_files {
 }
 
 
-// process MV_F_CREATED_BED6F {
-//   input:
-//     val readyToGo
-//     path 'New_bed6_file'
-//     path 'Outdir'
-//   script:
-//   """
-//   mv \$(readlink -f ./New_bed6_file) ./Outdir/
-//   """
-// }
-
-// process MV_S_CREATED_BED6F {
-//   input:
-//     val readyToGo
-//     path 'New_bed6_file'
-//     path 'Outdir'
-//   script:
-//   """
-//   mv \$(readlink -f ./New_bed6_file) ./Outdir/
-//   """
-// }
-
 
 workflow POOLED_Eindex_plusMinus_PIPELINE {
     take:
@@ -140,26 +118,6 @@ workflow POOLED_Eindex_plusMinus_PIPELINE {
     emit:
     all_finished
 }
-
-// workflow POOLED_Eindex_plusMinus_PIPELINE {
-//     take:
-//     bams_dir
-//     result_dir
-//     readyToGo
-//     main:
-//     create_dirs_split_files(result_dir,result_dir,params.PMpool_bed6_file)
-//     plus_outdir=create_dirs_split_files.out.plus_dir
-//     minus_outdir=create_dirs_split_files.out.minus_dir
-//     plus_regions=create_dirs_split_files.out.plus_regions
-//     minus_regions=create_dirs_split_files.out.minus_regions
-//     F_finished = PLUS_POOLED_EI(bams_dir,plus_regions,plus_outdir, readyToGo)
-//     S_finished = MINUS_POOLED_EI(bams_dir,minus_regions,minus_outdir,F_finished)
-//     all_finished = COMBINE_WAITING(F_finished,S_finished)
-//     MV_F_CREATED_BED6F(F_finished,plus_regions,plus_outdir)
-//     MV_S_CREATED_BED6F(S_finished,minus_regions,minus_outdir)    
-//     emit:
-//     all_finished
-// }
 
 
 

@@ -1,10 +1,23 @@
 #!/bin/bash
 #
+
+# ##################################################################################################
+#
+#                             INIT RNA EDITING PIPELINE
+#
+# ##################################################################################################
+#  
+#    run this script  once before the first time you run RNA EDITING PIPELINE
+
+
+
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-DOWNLOADED_DIR=${3:-"Downloaded"};
-STAR_INDEX_DIR=${4:-"STAR2.7.10b"};
-SALMON_INDEX_DIR=${5:-"Salmon1.10.2"};
-MAIN_DIR=${6:-"Heavy_Resources"};
+# set resources dirs names
+DOWNLOADED_DIR="Downloaded"
+STAR_INDEX_DIR="STAR2.7.10b"
+SALMON_INDEX_DIR="Salmon1.10.2"
+MAIN_DIR="Heavy_Resources"
+
 
 
 #---------------------------------------------------------------------------

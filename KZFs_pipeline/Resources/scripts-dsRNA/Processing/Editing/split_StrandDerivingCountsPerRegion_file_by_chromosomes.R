@@ -28,23 +28,6 @@ user_args <- parser$parse_args()
 
 print(paste("Wanted columns:", user_args$wanted_columns))
 
-# ### FOR DEBUG
-# user_args <- parser$parse_args(c("-i ",
-#                                 "-is StrandDerivingCountsPerRegion.csv",
-#                                 "-o /home/alu/fulther/Validations",
-#                                 "--output_suffix preprocessed.csv",
-#                                 "--output_prefix test",
-#                                 "-f GenomicRegion",
-#                                 "--wanted_columns Sample AluElement Length SenseGeneCommonName SenseGeneRefSeqID AntisenseGenomicPosition SenseGenomicPosition AntisenseGeneRefSeqID AntisenseGeneCommonName A2GEditingIndex C2TEditingIndex TotalCoverageAtAllPositions MeanCoveragePerRegion NumOfA2GMismatchesNonStranded NumOfANonStranded NumOfC2TMismatchesNonStranded NumOfTNonStranded"))
-
-# user_args$input_directory = "/private9/Projects/dsRNAProject/RNAEditingIndexOnHERegion/A2G/Plus/KidneyCortex"
-# user_args$input_file_suffix = "StrandDerivingCountsPerRegion"
-# user_args$output_dir = "/home/alu/fulther/Validations/"
-# user_args$output_suffix = "preprocessed.csv"
-# user_args$output_prefix = "test"
-# user_args$field = "GenomicRegion"
-# user_args$wanted_columns = c("Sample", "SenseGeneCommonName", "SenseGeneRefSeqID", "AntisenseGenomicPosition", "SenseGenomicPosition", "AntisenseGeneRefSeqID", "AntisenseGeneCommonName", "A2GEditingIndex", "C2TEditingIndex", "TotalCoverageAtAllPositions", "MeanCoveragePerRegion", "NumOfA2GMismatchesNonStranded", "NumOfANonStranded", "NumOfC2TMismatchesNonStranded", "NumOfTNonStranded")
-
 # logging -----------------------------------------------------------------
 library(log4r, quietly = T)
 my_layout <- function(level, ...) {

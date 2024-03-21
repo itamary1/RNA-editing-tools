@@ -1,10 +1,4 @@
 nextflow.enable.dsl=2
-
-/*******************
-
-******************/
-
-
 params.help=false
 
 
@@ -13,10 +7,10 @@ def helpMessage() {
     log.info '''\
 
           example command:
-          BAMS="/private10/Projects/KZNF_itamar/KZFs_pipeline/Runs/Jose_len51/Raw_data/STAR/"
-          Refseq_file=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/KZFs/refseqsFormat_KrabGencodeLocations.bed
-          bed6_file=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/KZFs/KRABs_locations.gencode.bed
-          nextflow -bg -c /home/alu/twerski/Scripts/Nextflow/Special_pipelines/Configs/Dockers/SubP_configs/editing_index_plusMinus.nf.docker.config run /home/alu/twerski/Scripts/Nextflow/Special_pipelines/Subpipelines/editing_index_plusMinus.nf -profile hg38 --bams_dir $BAMS --PMEI_bed6file $bed6_file &> run.out.txt &
+          BAMS="Jose_len51/Raw_data/STAR/"
+          Refseq_file=Resources/KZFs/refseqsFormat_KrabGencodeLocations.bed
+          bed6_file=KRABs_locations.gencode.bed
+          nextflow -bg -c ${P_DIR}/Configs/Dockers/SubP_configs/editing_index_plusMinus.nf.docker.config run ${P_DIR}/Subpipelines/editing_index_plusMinus.nf -profile hg38 --bams_dir $BAMS --PMEI_bed6file $bed6_file &> run.out.txt &
 
             this is version of runing editing index for case of running in the both strands:
             As every region in regular editing index run will be tested on one strand according to refseq annotation.

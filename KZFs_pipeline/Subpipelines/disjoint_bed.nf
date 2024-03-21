@@ -1,34 +1,9 @@
-// nextflow.enable.dsl=2
+nextflow.enable.dsl=2
 
-
-// params.help=false
-
-
-// def helpMessage() {
-//     log.info '''\
-
-
-
-//             '''
-//             .stripIndent()
-
-// }
-
-
-
-// if (!(params.bed6File || params.help)){
-//   println "please set bed6_pooled_EI_disjoint, exiting.."
-//   System.exit(1)
-// }
-
-    
-    
 
 process  disjoint_bed_file{
   input:
     path bed6file_regions
-    // path result_dir
-    // val result_dir_full
   output:
     // path 'splited_files_dir'
     path "disjointed_files/*bed"

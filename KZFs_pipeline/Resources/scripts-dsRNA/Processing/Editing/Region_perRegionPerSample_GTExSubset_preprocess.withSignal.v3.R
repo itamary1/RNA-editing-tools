@@ -1,8 +1,6 @@
 ###DESCRIPTION: PROCESS AEI PER REGION PER SAMPLE OUTPUT
 ###             SEE IF THERE IS A CERTAIN ELEMENT THAT CORRELATES TO FULL INDEX
 
-#VER 1 12.9.2019: For *Mouse*
-#DATA: HygeneTheory ( /private8/Projects/SubAluProject/ENCODE/IndexPerRegionPerSample)
 
 
 rm(list = ls(all = TRUE))

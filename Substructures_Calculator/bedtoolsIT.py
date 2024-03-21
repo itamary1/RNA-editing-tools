@@ -57,21 +57,3 @@ def intersect_bStdin(bed_var, bed_file, bedtoolsOptions):
     return btOut.stdout if not btOut.stderr else ("ERROR " + btOut.stderr)
 
 
-if __name__ == "__main__":
-    print("\n\n>>>>>>>>>>>>>>>>>>>>>running example<<<<<<<<<<<<<<<<<<<")
-    print("\n\ncode :")
-    print('gr=genome_reader("/private4/gabayo2/Fasta/S-cerevisiae/sacCer3.fa")')
-    print("gr.get_fasta('chrI',100,120)")
-    print("\noutput : ")
-    gr = genome_reader("/private4/gabayo2/Fasta/S-cerevisiae/sacCer3.fa")
-    print(gr.get_fasta("chrI", 100, 120))
-    print(
-        "NOTE! every instance of genome_reader will have the genome one the RAM, so you better make as few instace as possible"
-    )
-
-    print("\n\ncode :")
-    print(r"bed_var=Scaffold100019\t157348\t157549\nScaffold100019\t158094\t158095")
-    print('intersect_aStdin(bed_var, "/private8/Projects/zohar/RNAstructure/squid/editing_site.bed","-wa")')
-    print("\noutput : ")
-    bed_var = "Scaffold100019\t157348\t157549\nScaffold800019\t158094\t158095"
-    print(intersect_aStdin(bed_var, "/private8/Projects/zohar/RNAstructure/squid/editing_site.bed", "-wa"))

@@ -1,5 +1,4 @@
-#!/private/common/Software/anaconda/anaconda3/envs/python3/bin/python
-__author__ = "Roni Cohen-Fultheim"
+#python
 
 # region Imports
 import argparse

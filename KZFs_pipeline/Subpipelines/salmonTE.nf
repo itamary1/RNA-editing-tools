@@ -11,11 +11,11 @@ def helpMessage() {
             
             command example:
             
-            conf=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Configs/Dockers/SubP_configs/salmonTE.nf.docker.config
-            scr=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Subpipelines/salmonTE.nf
-            indir=/home/alu/twerski/Scripts/Nextflow/training_data/trys/STE_test/try_buildEpim/SalmonTE/example
-            outdir=/home/alu/twerski/temp/try_CMP_nf/Results
-            nextflow -c $conf run $scr --salmonTE_outdir $outdir --indir $indir --test_step --conditions_file /home/alu/twerski/temp/try_CMP_nf/condition.csv
+            conf=${P_DIR}/Configs/Dockers/SubP_configs/salmonTE.nf.docker.config
+            scr=${P_DIR}/Subpipelines/salmonTE.nf
+            indir=${P_DIR}/Scripts/Nextflow/training_data/trys/STE_test/try_buildEpim/SalmonTE/example
+            outdir=${P_DIR}/temp/try_CMP_nf/Results
+            nextflow -c $conf run $scr --salmonTE_outdir $outdir --indir $indir --test_step --conditions_file ${P_DIR}/temp/try_CMP_nf/condition.csv
 
 
             all params and defualts:
@@ -126,21 +126,6 @@ process SALMONTE_QUANT {
     chmod -R u+rw \${full_res_dir}
     """
 }
-
-
-// process split_to_groups {
-//   input:
-//     path 'groups_csv.csv'
-//   output:
-//     path 'group_*_dir'
-//   script:
-//   """
-// !!!!!!!!!!!!! in case u want to create dir with files for every group - remeber you must use hard link because of   docker mounting
-//   for group in $()
-// 
-//   """
-// }
-
 
 
 process SALMONTE_TEST {

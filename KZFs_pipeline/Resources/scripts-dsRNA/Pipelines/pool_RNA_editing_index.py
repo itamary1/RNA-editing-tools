@@ -1,5 +1,4 @@
-#! /private/common/Software/anaconda/anaconda3/envs/python3/bin/python
-__author__ = "Roni Cohen-Fultheim"
+#! /bin/python
 
 # region Imports
 import argparse
@@ -253,7 +252,7 @@ if __name__ == '__main__':
                                 default=None, help='Log file, default is to create in input dir')
     site_parser.add_argument('--group_file',nargs='?', dest="group_file", help='CSV with sample to group. Will pool samples according to given groups, sample count per group will be calculated according to this file. Format: "Sample,Group", where "Sample" is the unique prefix of each sample and Group is a group name of your choice',required=True)
     site_parser.add_argument('-s', '--suff_cmpileup',nargs='?', dest="cmpileup_suffix", default="ucscHg38Alu.bed.gz_mpileup.cmpileup", help='cmpileup files suffix')
-    site_parser.add_argument('--snps',nargs='?', dest="snps_file", help='Path of SNP BED file to remove from analysis', default="/private/common/Software/AEI/RNAEditingIndex1.1/RNAEditingIndexer/Resources/SNPs/HomoSapiens/ucscHg38CommonGenomicSNPs150.bed.gz")
+    site_parser.add_argument('--snps',nargs='?', dest="snps_file", help='Path of SNP BED file to remove from analysis', default="ReplaceSNPPATH/HomoSapiens/ucscHg38CommonGenomicSNPs150.bed.gz")
     site_parser.add_argument('-rid', '--region_id_file',nargs='?', dest="region_id_file", default=None, help='A CSV file to replace region coordinates as grouping variable during pooling (only affects last step). Must conform to the format "Region,NewRegionID", to ensure proper pooling. Can include a partial list of regions to pool (reduce computational load). This allows calculating pooled editing over sites from non-consecutive genomic regions, by renaming them to a single region ID. Note that an inner join is being made, so that *a genomic region can be joined in different combinations* and that *only transformed region IDs will be kept*.')
     site_parser.add_argument('-p', '--processes',action="store", type=int, default=3, dest="processes", help='Number of samples to run in parallel')
     site_parser.add_argument('--force',action="store_true", default=False, dest="force", help='Force rerun for pooling of cmpileups')

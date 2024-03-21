@@ -18,9 +18,9 @@ def helpMessage() {
             >>>>>>>>>>>>>>>>>>> paramters for fastp were taken from samboseq projet TODO   <<<<<<<<<<<<<<<<<<<<<<<<<<<
 
              command for example:
-             conf=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Configs/Dockers/analize_editing_KZF_fullPipeline.nf.docker.config
-             nfScript=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/analize_editing_KZF_fullPipeline.nf
-             nextflow -bg -c $conf run $nfScript -profile hg38 --use_existing_fastq --fastq_indir /home/alu/twerski/Scripts/Nextflow/training_data/jose_oneSamp --genome_length 50 --project_dir $PWD  --compress_original_fastq false &> run_log.txt
+             conf=${P_DIR}/Configs/Dockers/analize_editing_KZF_fullPipeline.nf.docker.config
+             nfScript=${P_DIR}/analize_editing_KZF_fullPipeline.nf
+             nextflow -bg -c $conf run $nfScript -profile hg38 --use_existing_fastq --fastq_indir ${P_DIR}/Scripts/Nextflow/training_data/jose_oneSamp --genome_length 50 --project_dir $PWD  --compress_original_fastq false &> run_log.txt
 
             directory for your pipeline results, if wont set it wil be $PWD
             params.project_dir="$launchDir"
@@ -159,73 +159,68 @@ workflow KZF_PIPELINE {
 
     bams_dir = params.star_dir
     
-    // // // ---------------------------------------------------- TE analysis
-    // // run salmonTE on the clean fastq dir (path from the downloadAndPreprocess config)
-    // // note that salmonTE is built to work on dir of fastqs
-    // SalmonTE_finished = SALMONTE_PIPELINE(fastp_finished,params.preproc_fastq_dir,params.SalmonTE_result_dir)
-    // fastq_finished = COMB1(labPipline_finished,SalmonTE_finished)
+    // // ---------------------------------------------------- TE analysis
+    // run salmonTE on the clean fastq dir (path from the downloadAndPreprocess config)
+    // note that salmonTE is built to work on dir of fastqs
+    SalmonTE_finished = SALMONTE_PIPELINE(fastp_finished,params.preproc_fastq_dir,params.SalmonTE_result_dir)
+    fastq_finished = COMB1(labPipline_finished,SalmonTE_finished)
 
-    // // ----------------------------------------------------------------------------------------------------------> analize editing in KZFs
+    // ----------------------------------------------------------------------------------------------------------> analize editing in KZFs
 
-    // // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs transcripts
-    // // run on all KZFs transcripts
-    // // run twice:  PMsplited for looking per_gene and altogether
-    // EI_txPM_finished = EI_perGene_KZFs_tx(bams_dir,params.KZF_tx_EI_perGene_dir,labPipline_finished)
-    // totalEI_tx_fin = EI_total_KZFs_tx(bams_dir,params.KZF_tx_EI_dir,labPipline_finished)
-    // // run on all KZFs containing sites in orshai list transcripts
-    // EI_tx_OrshList_fin = EI_tx_OrshList_KZFs(bams_dir,params.KZF_contains_OrsahiSites_tx_EI_dir,EI_txPM_finished)
-    // // run on all KZFs containing more then 10 sites in orshai list transcripts
-    // EI_enriched_OrsahiSites_tx_fin = EI_OrshListEnriched_KZFs_tx(bams_dir,params.KZF_enriched_OrsahiSites_tx_EI_dir,totalEI_tx_fin)
-    // tx_finished=COMB2(EI_enriched_OrsahiSites_tx_fin,EI_tx_OrshList_fin)
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs transcripts
+    // run on all KZFs transcripts
+    // run twice:  PMsplited for looking per_gene and altogether
+    EI_txPM_finished = EI_perGene_KZFs_tx(bams_dir,params.KZF_tx_EI_perGene_dir,labPipline_finished)
+    totalEI_tx_fin = EI_total_KZFs_tx(bams_dir,params.KZF_tx_EI_dir,labPipline_finished)
+    // run on all KZFs containing sites in orshai list transcripts
+    EI_tx_OrshList_fin = EI_tx_OrshList_KZFs(bams_dir,params.KZF_contains_OrsahiSites_tx_EI_dir,EI_txPM_finished)
+    // run on all KZFs containing more then 10 sites in orshai list transcripts
+    EI_enriched_OrsahiSites_tx_fin = EI_OrshListEnriched_KZFs_tx(bams_dir,params.KZF_enriched_OrsahiSites_tx_EI_dir,totalEI_tx_fin)
+    tx_finished=COMB2(EI_enriched_OrsahiSites_tx_fin,EI_tx_OrshList_fin)
 
-    // // run editing index on all KZF that have inverted neighbor KZF
-    // EI_inverted_KZFs_tx_fin = EI_inverted_KZFs_tx(bams_dir,params.KZF_inveterd_tx_EI_dir,totalEI_tx_fin)
+    // run editing index on all KZF that have inverted neighbor KZF
+    EI_inverted_KZFs_tx_fin = EI_inverted_KZFs_tx(bams_dir,params.KZF_inveterd_tx_EI_dir,totalEI_tx_fin)
 
-    // // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs exones
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs exones
 
-    // // run on all KZFs exons
+    // run on all KZFs exons
+    // run twice: altogether and Pooled for looking per_gene
+    totalEI_exons_finished = EI_total_KZFs_exons(bams_dir,params.KZF_exons_EI_dir,tx_finished)
+    KZF_exons_pooledEI_finished =KZF_exons_pooledEI(bams_dir,params.KZF_exons_pooledEI_dir,tx_finished)
+    // run on all KZFs containing sites in orshai list
+    EI_exons_OrshList_KZFs_finished = EI_exons_OrshList_KZFs(bams_dir, params.KZF_contains_OrsahiSites_exons_EI_dir, totalEI_exons_finished)
+    // run on all KZFs containing more then 10 sites in orshai list
+    EI_OrshListEnriched_KZFs_exons_finished= EI_OrshListEnriched_KZFs_exons(bams_dir,params.KZF_enriched_OrsahiSites_exons_EI_dir, KZF_exons_pooledEI_finished)
+
+    // run on all KZF that have inverted neighbor KZF
+    EI_inverted_KZFs_exons_finished= EI_inverted_KZFs_exons(bams_dir,params.KZF_inveterd_exons_EI_dir, KZF_exons_pooledEI_finished)
+
+    exones_finished=COMB3(EI_exons_OrshList_KZFs_finished,EI_OrshListEnriched_KZFs_exons_finished)
+
+    // // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs cds
+    // // run on all KZFs CDS
     // // run twice: altogether and Pooled for looking per_gene
-    // totalEI_exons_finished = EI_total_KZFs_exons(bams_dir,params.KZF_exons_EI_dir,tx_finished)
-    // KZF_exons_pooledEI_finished =KZF_exons_pooledEI(bams_dir,params.KZF_exons_pooledEI_dir,tx_finished)
-    // // run on all KZFs containing sites in orshai list
-    // EI_exons_OrshList_KZFs_finished = EI_exons_OrshList_KZFs(bams_dir, params.KZF_contains_OrsahiSites_exons_EI_dir, totalEI_exons_finished)
-    // // run on all KZFs containing more then 10 sites in orshai list
-    // EI_OrshListEnriched_KZFs_exons_finished= EI_OrshListEnriched_KZFs_exons(bams_dir,params.KZF_enriched_OrsahiSites_exons_EI_dir, KZF_exons_pooledEI_finished)
+    totalEI_CDS_finished = EI_total_KZFs_CDS(bams_dir,params.KZF_CDS_EI_dir,exones_finished)
+    KZF_CDS_pooledEI_finished =KZF_CDS_pooledEI(bams_dir,params.KZF_CDS_pooledEI_dir, exones_finished)
+    // run on all KZFs containing sites in orshai 
+    EI_CDS_OrshList_KZFs_finished = EI_CDS_OrshList_KZFs(bams_dir, params.KZF_contains_OrsahiSites_CDS_EI_dir, totalEI_CDS_finished)
+    // run on all KZFs containing more then 10 sites in orshai list
+    EI_OrshListEnriched_KZFs_CDS_finished = EI_OrshListEnriched_KZFs_CDS(bams_dir, params.KZF_enriched_OrsahiSites_CDS_EI_dir, KZF_CDS_pooledEI_finished)
 
-    // // run on all KZF that have inverted neighbor KZF
-    // EI_inverted_KZFs_exons_finished= EI_inverted_KZFs_exons(bams_dir,params.KZF_inveterd_exons_EI_dir, KZF_exons_pooledEI_finished)
-
-    // exones_finished=COMB3(EI_exons_OrshList_KZFs_finished,EI_OrshListEnriched_KZFs_exons_finished)
-
-    // // // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> look on all the kzfs cds
-    // // // run on all KZFs CDS
-    // // // run twice: altogether and Pooled for looking per_gene
-    // totalEI_CDS_finished = EI_total_KZFs_CDS(bams_dir,params.KZF_CDS_EI_dir,exones_finished)
-    // KZF_CDS_pooledEI_finished =KZF_CDS_pooledEI(bams_dir,params.KZF_CDS_pooledEI_dir, exones_finished)
-    // // run on all KZFs containing sites in orshai 
-    // EI_CDS_OrshList_KZFs_finished = EI_CDS_OrshList_KZFs(bams_dir, params.KZF_contains_OrsahiSites_CDS_EI_dir, totalEI_CDS_finished)
-    // // run on all KZFs containing more then 10 sites in orshai list
-    // EI_OrshListEnriched_KZFs_CDS_finished = EI_OrshListEnriched_KZFs_CDS(bams_dir, params.KZF_enriched_OrsahiSites_CDS_EI_dir, KZF_CDS_pooledEI_finished)
-
-    // // run on all KZF that have inverted neighbor KZF
-    // EI_inverted_KZFs_CDS_finished = EI_inverted_KZFs_CDS(bams_dir, params.KZF_inveterd_CDS_EI_dir, KZF_CDS_pooledEI_finished)
+    // run on all KZF that have inverted neighbor KZF
+    EI_inverted_KZFs_CDS_finished = EI_inverted_KZFs_CDS(bams_dir, params.KZF_inveterd_CDS_EI_dir, KZF_CDS_pooledEI_finished)
     
 
-    // CDS_finihed = COMB4(EI_OrshListEnriched_KZFs_CDS_finished,EI_CDS_OrshList_KZFs_finished)
-    // // Orshai sites in KZFs' CDS EditingIndex    
-    // // total  EI
-    // EI_total_KZFs_OrshaiInCDS_finished =EI_total_KZFs_OrshaiInCDS(bams_dir,params.KZF_OrshaiInCDS_EI_dir,CDS_finihed)
+    CDS_finihed = COMB4(EI_OrshListEnriched_KZFs_CDS_finished,EI_CDS_OrshList_KZFs_finished)
+    // Orshai sites in KZFs' CDS EditingIndex    
+    // total  EI
+    EI_total_KZFs_OrshaiInCDS_finished =EI_total_KZFs_OrshaiInCDS(bams_dir,params.KZF_OrshaiInCDS_EI_dir,CDS_finihed)
     
-    // //    per_gene
-    // // !!!!!!!!!!some bug in pooling scripts make this crashing
-    // // KZF_OrshaiInCDS_pooledEI_finished =KZF_OrshaiInCDS_pooledEI(bams_dir,params.KZF_OrshaiInCDS_pooledEI_dir,CDS_finihed)
-    // // OrshaiInCDS_finished = COMB5(EI_total_KZFs_OrshaiInCDS_finished,KZF_OrshaiInCDS_pooledEI_finished)
-
 
     // run EI on CDS of 3 random groups of genes as control
-    EI_CDS_GROUP_A_f=EI_CDS_GROUP_A(bams_dir,params.controlA_CDS_EI_dir,true)
-    EI_CDS_GROUP_B_f=EI_CDS_GROUP_B(bams_dir,params.controlB_CDS_EI_dir,true)
-    EI_CDS_GROUP_C_f=EI_CDS_GROUP_C(bams_dir,params.controlC_CDS_EI_dir,true)
+    EI_CDS_GROUP_A_f=EI_CDS_GROUP_A(bams_dir,params.controlA_CDS_EI_dir,EI_total_KZFs_OrshaiInCDS_finished)
+    EI_CDS_GROUP_B_f=EI_CDS_GROUP_B(bams_dir,params.controlB_CDS_EI_dir,EI_total_KZFs_OrshaiInCDS_finished)
+    EI_CDS_GROUP_C_f=EI_CDS_GROUP_C(bams_dir,params.controlC_CDS_EI_dir,EI_total_KZFs_OrshaiInCDS_finished)
     
     // if(params.compress_fastqs_after_analysis && ! params.debug_kzf_pipeline)
     //     COMPRESS_FASTQs(clean_fastqCH, fastq_finished)

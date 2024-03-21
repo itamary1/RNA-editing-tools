@@ -1,12 +1,12 @@
 # create argsparse
 ARGPARSE_DESCRIPTION="Pool post-processing for RNA editing index"      # this is optional
-source /private/common/Software/BashLibs/argparse-bash/argparse.bash || exit 1
+source ${HOME}/argparse.bash || exit 1
 argparse "$@" <<EOF || exit 1
 parser.add_argument('-i', '--input_dir', type=str, help='Path of RNA editing index directory (where cmpileup directory resides)', required=True)
 parser.add_argument('-o', '--output_dir',type=str, help='Path of pooled results directory', required=True)
 parser.add_argument('--group_file',nargs='+', type=str, help='CSV with sample to group. Will pool samples according to given groups, sample count per group will be calculated according to this file. Group must include fragment of file path (file name or directories). Format: Sample,Group',required=True)
 parser.add_argument('-s', '--suff_cmpileup',type=str, help='cmpileup suffix', default="_ucscHg38Alu.bed.gz_mpileup.cmpileup")
-parser.add_argument('-e', '--email',type=str, help='Email of user', default="ronif10+levanonlab@gmail")
+parser.add_argument('-e', '--email',type=str, help='Email of user', default="")
 EOF
 
 # stop if failed
@@ -19,9 +19,9 @@ trap 'echo ""${last_command}" command filed with exit code $?."' EXIT
 ###############################
 python_cmd=python3.6
 r_cmd=Rscript
-sum_cmpileup_allMM_script_cmd=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNAProcessing/Cmpileup/sum_cmpileup_allMM.py
-split_summed_cmpileup_by_SNP=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNAProcessing/Cmpileup/summed_cmpileup_filterSNP.sh
-pool_info_script=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNAProcessing/Cmpileup/all_ES_in_regions_analysis.R
+sum_cmpileup_allMM_script_cmd=Replace_parentPath/KZFs_pipeline/Resources/scripts-dsRNAProcessing/Cmpileup/sum_cmpileup_allMM.py
+split_summed_cmpileup_by_SNP=Replace_parentPath/KZFs_pipeline/Resources/scripts-dsRNAProcessing/Cmpileup/summed_cmpileup_filterSNP.sh
+pool_info_script=Replace_parentPath/KZFs_pipeline/Resources/scripts-dsRNAProcessing/Cmpileup/all_ES_in_regions_analysis.R
 
 ###############################
 ####    FLATTEN CMPILEUPS   ###

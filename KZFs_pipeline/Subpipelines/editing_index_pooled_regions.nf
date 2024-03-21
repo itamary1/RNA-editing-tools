@@ -19,10 +19,6 @@ if((!file.exists()) && (!params.help)){
 
 
 
-// if((params.docker_run) && (!params.bams_dir) && (!params.help)){
-//     println "you must set bams dir when runing with docker. exiting.."
-//     System.exit(1)
-// }
 
 def helpMessage() {
     log.info '''\
@@ -57,36 +53,17 @@ def helpMessage() {
                 // if you want your result for every sample seperatly, you should leave this as empty string
                 group_file_csv=''
                 pool_CMP_max_parallell = 10
-                which_python_39 = '/private/common/Software/anaconda/anaconda3/envs/python3/bin/python'
-                which_pooling_script = "${params.special_pipelines_dir}/Resources/scripts-dsRNA/Pipelines/pool_RNA_editing_index.py"
-                which_pooling_script_command = "$params.which_python_39 $params.which_pooling_script sites"
-                which_createRID_command = "Rscript /home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNA/RID_creator.R"
-                profiles{
-                hg38 {
-                    params.profile_selected = "hg38"       
-                    params.pooledEI_snps_file = "/private/common/Software/AEI/RNAEditingIndex1.1/RNAEditingIndexer/Resources/SNPs/HomoSapiens/ucscHg38CommonGenomicSNPs150.bed.gz"
-
-                }
-                mm10 {
-                    params.profile_selected = "mm10"
-                    params.pooledEI_snps_file = "/private/common/Software/AEI/RNAEditingIndex1.1/RNAEditingIndexer/Resources/SNPs/MusMusculus/ucscMM10CommonGenomicSNPs142.bed.gz"
-                }
-                standard {
-                    params.profile_selected = ""
-                    params.pooledEI_snps_file = ""
-
-                }
-
-
+                which_python_39 = 'python3'
+                you shloud set profile -hg38/mm10
+                or set the SNPs path:
+                params.pooledEI_snps_file
+                
             '''
             .stripIndent()
 
 }
 
-// if(!params.RID_or_bed6_file && !params.dynamic_regions) {
-//   println "you must set RID_file or pool_bed6_file"
-//   System.exit(1)
-// }
+
 
 
 process pool_regions_index {
@@ -138,20 +115,6 @@ workflow POOLED_EI_Dynamic_regions_PIPELINE {
     emit:
     pooled_index_dir
 }
-
-// workflow POOLED_EDITING_INDEX_PIPELINE {
-//     take:
-//     All_bams_dir_path
-//     result_dir
-//     star_finished
-//     main:
-//     // CMPILEUP_PIPELINE will make a bam channle from the dir
-//     cmp_res = CMPILEUP_PIPELINE(All_bams_dir_path, result_dir, star_finished)
-//     pooled_index_dir = pool_regions_index(cmp_res.first(), params.RID_or_bed6_file,result_dir)
-//     emit:
-//     pooled_index_dir
-// }
-
 
 
 

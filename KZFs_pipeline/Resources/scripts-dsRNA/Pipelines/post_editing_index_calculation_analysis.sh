@@ -1,11 +1,11 @@
 # create argsparse
 ARGPARSE_DESCRIPTION="Pool post-processing for RNA editing index"      # this is optional
-source /private/common/Software/BashLibs/argparse-bash/argparse.bash || exit 1
+source ${HOME}/argparse.bash || exit 1
 argparse "$@" <<EOF || exit 1
 parser.add_argument('-i', '--input_dir', type=str, help='Path of RNA editing index directory (where cmpileup directory resides)', required=True)
 parser.add_argument('-o', '--output_dir',type=str, help='Path of pooled results directory', required=True)
 parser.add_argument('--group_file',nargs='+', type=str, help='CSV with sample to group. Will pool samples according to given groups, sample count per group will be calculated according to this file. Format: Sample,Group',required=True)
-parser.add_argument('-e', '--email',type=str, help='Email of user', default="ronif10+levanonlab@gmail")
+parser.add_argument('-e', '--email',type=str, help='Email of user', default="")
 EOF
 
 # stop if failed
@@ -18,8 +18,8 @@ trap 'echo ""${last_command}" command filed with exit code $?."' EXIT
 ####    CONSTANT SUFFIXES   ###
 ###############################
 r_cmd=Rscript
-split_by_chr_script=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNAProcessing/Editing/split_StrandDerivingCountsPerRegion_file_by_chromosomes.R
-pool_by_chr_script=/home/alu/twerski/Scripts/Nextflow/Special_pipelines/Resources/scripts-dsRNAProcessing/Editing/Region_perRegionPerSample_GTExSubset_preprocess.withSignal.R
+split_by_chr_script=Replace_parentPath/KZFs_pipeline/Resources/scripts-dsRNAProcessing/Editing/split_StrandDerivingCountsPerRegion_file_by_chromosomes.R
+pool_by_chr_script=Replace_parentPath/KZFs_pipeline/Resources/scripts-dsRNAProcessing/Editing/Region_perRegionPerSample_GTExSubset_preprocess.withSignal.R
 
 #################################
 ####   SPLIT REGIONS BY CHR   ###
