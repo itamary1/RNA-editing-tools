@@ -24,6 +24,14 @@ def helpMessage() {
     log.info '''\
             GET RNA EDITING INDEX ON POOLED REGIONS
             ==================================
+            example command:
+            OD=${PD}Scripts/Nextflow/training_data/trys/trypool && cd $OD 
+            Conf=${PD}Scripts/Nextflow/Special_pipelines/Configs/Dockers/SubP_configs/editing_index_pooled_regions.nf.docker.config
+            Script=${PD}Scripts/Nextflow/Special_pipelines/Subpipelines/editing_index_pooled_regions.nf
+            Reg=${PD}Scripts/Nextflow/Special_pipelines/Resources/KZFs/CDS/inverted_KRABS_CDS.gencode.bed6.bed
+            nextflow -c $Conf run $Script --bams_dir ${PD}Scripts/Nextflow/training_data/example_bam/ --pooledEIregions $Reg --pooledEI_result_dir $OD --pooledEIbed6_file $Reg  -profile hg38
+
+
             params to set:
               required:
 
@@ -93,7 +101,6 @@ process pool_regions_index {
     $params.which_pooling_script_command -i $cmpileups -o \$(readlink -f $pooling_result_dir) --group_file ./group_file.txt -rid ./RID_file.csv --snps \$(readlink -f $snps_file) -s mpileup.cmpileup -p $params.pool_CMP_max_parallell
     """
 }
-  // $params.which_pooling_script_command -i $cmpileups -o \$(readlink -f $pooling_result_dir) --group_file ./group_file.txt -rid ./RID_file.csv -s ${params.cmp_regions_name}_mpileup.cmpileup -p $params.pool_CMP_max_parallell"""
 
 
 // include { CMPILEUP_PIPELINE } from "${params.levanon_lab_pipelines_dir}/Subpipelines/cmpileup.nf"
@@ -125,7 +132,6 @@ workflow {
     if(params.help){
         helpMessage()
     } else {
-        POOLED_EI_Dynamic_regions_PIPELINE(params.bams_dir,params.regions,params.pooledEI_result_dir, true).view()
-        // POOLED_EI_Dynamic_regions_PIPELINE(params.bams_dir,params.RID_or_bed6_file,params.pooledEI_result_dir, true).view()
+        POOLED_EI_Dynamic_regions_PIPELINE(params.bams_dir,params.pooledEIregions,params.pooledEIbed6_file,params.pooledEI_result_dir, true).view()
     }
 }
