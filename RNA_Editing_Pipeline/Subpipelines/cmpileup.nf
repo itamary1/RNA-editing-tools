@@ -87,7 +87,9 @@ process RUN_CMP {
         path './cmp_result/cmpileups'
     
     script:
-          paried_flag = (!(params.singleEnd) && params.stranded) ? "\\' is_paired_end=True\\'" : ''
+          // deprecated
+          //paried_flag = (!(params.singleEnd) && params.stranded) ? "\\' is_paired_end=True\\'" : ''
+          paried_flag= ''
         """
         awk '{OFS="\t"; print \$1,\$2,\$3}' $regions_bed > ${regions_bed}.bed3.bed
         # create dirs for results and logs
